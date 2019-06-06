@@ -38,7 +38,7 @@ for f in args["files"]:
         n_out = f[: -len(EXTENSION)]
     f_in.close()
 
-    f_out = open(n_out, "ab")
+    f_out = open(n_out, "wb")
     f_out.write(output)
     f_out.close()
     print("[INFO] Done")
