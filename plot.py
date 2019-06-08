@@ -1,20 +1,36 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
+def show_all(dataframe, index):
+    print(
+        "Column {}\nMax {}\nMédia {}\nMediana {}\nMínimo {}\n".format(
+            index,
+            dataframe.max(),
+            dataframe.mean(),
+            dataframe.median(),
+            dataframe.min(),
+            # dataframe.mode(),
+        )
+    )
+
+
 dataframe = pd.read_csv(
     "confidential/train150.txt", delimiter="\t", header=None
 )
 dataset = dataframe.values
 
-# dataset = np.loadtxt(args["dataset"], dtype="float", delimiter="\t")
-# Dia, Mês, Ano, Hora, Velocidade, Direção,
-# Temperatura, Umidade, Pressão
+print("[INFO] Dataframe info")
+dataframe.info()
 
-# X = dataset[:-1]
-# Y = dataset[:, 4][1:]
+print("[INFO] Columns info")
+show_all(dataframe[4], 4)
+show_all(dataframe[5], 5)
+show_all(dataframe[6], 6)
+show_all(dataframe[7], 7)
+show_all(dataframe[8], 8)
 
 plt.style.use("ggplot")
-# plt.figure()
 _, axs = plt.subplots(5, 1)
 axs[0].plot(range(0, len(dataset[:, 3])), dataset[:, 4])
 axs[0].set_title("velo")
@@ -27,4 +43,5 @@ axs[3].set_title("umi")
 axs[4].plot(range(0, len(dataset[:, 3])), dataset[:, 8])
 axs[4].set_title("press")
 plt.legend()
-plt.show()
+plt.savefig("out/plot.png")
+# plt.show()
