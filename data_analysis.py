@@ -1,15 +1,17 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 
 def show_all(dataframe, index):
     print(
-        "Column {}\nMax {}\nMédia {}\nMediana {}\nMínimo {}\n".format(
+        "\nColumn {}\nMax {}\nMédia {}\nMediana {}\nMínimo {}\nNan {}".format(
             index,
             dataframe.max(),
             dataframe.mean(),
             dataframe.median(),
             dataframe.min(),
+            np.where(np.isnan(dataframe.values))
             # dataframe.mode(),
         )
     )
