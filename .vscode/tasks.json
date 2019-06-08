@@ -44,6 +44,36 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "python-rna",
+            "type": "shell",
+            "command": "/opt/anaconda3/envs/${workspaceFolderBasename}/bin/python",
+            "args": [
+                "${workspaceFolder}/rna.py",
+                "-d",
+                "${workspaceFolder}/confidential/train150.txt",
+                "-m",
+                "${workspaceFolder}/out/wind_speed_nn.model",
+                "-p",
+                "${workspaceFolder}/out/wind_speed_plot.png"
+                // "-l",
+                // "${workspaceFolder}/confidential/leaime.txt"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "python-exec",
+            "type": "shell",
+            "command": "/opt/anaconda3/envs/${workspaceFolderBasename}/bin/python",
+            "args": ["${file}"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
