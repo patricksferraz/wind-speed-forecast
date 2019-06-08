@@ -4,6 +4,7 @@ import numpy as np
 
 
 def show_all(dataframe, index):
+    nans = np.where(np.isnan(dataframe.values))
     print(
         "\nColumn {}\nMax {}\nMédia {}\nMediana {}\nMínimo {}\nNan {}".format(
             index,
@@ -15,6 +16,7 @@ def show_all(dataframe, index):
             # dataframe.mode(),
         )
     )
+    return nans
 
 
 dataframe = pd.read_csv(
@@ -26,11 +28,20 @@ print("[INFO] Dataframe info")
 dataframe.info()
 
 print("[INFO] Columns info")
-show_all(dataframe[4], 4)
-show_all(dataframe[5], 5)
-show_all(dataframe[6], 6)
-show_all(dataframe[7], 7)
-show_all(dataframe[8], 8)
+nans_4 = show_all(dataframe[4], 4)
+nans_5 = show_all(dataframe[5], 5)
+nans_6 = show_all(dataframe[6], 6)
+nans_7 = show_all(dataframe[7], 7)
+nans_8 = show_all(dataframe[8], 8)
+
+# Get all where column 0 is 15 value
+# subset = dataframe[dataframe[0] == 15]
+# values = subset[6].values
+# index_nan = np.where(np.isnan(values))
+# values = np.delete(values, index_nan[0])
+
+# print(np.average(values))
+# print(np.average([24.33333333, 24.08333333]))
 
 plt.style.use("ggplot")
 _, axs = plt.subplots(5, 1)
