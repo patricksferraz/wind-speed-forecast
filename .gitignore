@@ -5,3 +5,4 @@ confidential/*
 !confidential/*.py
 !confidential/*.encrypt
 **.pem
+.ipynb_checkpoints
