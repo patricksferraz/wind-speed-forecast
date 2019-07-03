@@ -30,7 +30,7 @@ dataset = dataframe.values
 # dataset = np.loadtxt(args["dataset"], dtype="float", delimiter="\t")
 
 X = dataset[:-1]
-Y = dataset[:, 4][1:]
+Y = dataset[1:, 4]
 
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
@@ -42,12 +42,8 @@ scaler = preprocessing.MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-scalert = preprocessing.MinMaxScaler()
-Y_train = scalert.fix_transform(Y_train.reshape(-1, 1))
-Y_test = scalert.transform(Y_test.reshape(-1, 1))
-
-print(X_train)
-print(Y_train)
+Y_train = scaler.fix_transform(Y_train.reshape(-1, 1))
+Y_test = scaler.transform(Y_test.reshape(-1, 1))
 
 # define the 9-9-6-1 architecture using tf.keras
 model = tf.keras.models.Sequential()
@@ -76,29 +72,32 @@ H = model.fit(
     batch_size=1,
 )
 
-# evaluate the network
-print("[INFO] evaluating network...")
-# predictions = model.predict(X_test, batch_size=1)
-# print(classification_report(Y_test, predictions, target_names=["velocidade"]))
-
 # evaluate the model
-# scores = model.evaluate(X, Y)
-# print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+scores = model.evaluate(X_test, Y_test)
+print(
+    "{}: {}\n{}: {}".format(
+        model.metrics_names[1], scores[1], model.metrics_names[2], scores[2]
+    )
+)
 
-# plot the training loss and accuracy
+# plot the training loss, MAE and MSE
 N = np.arange(0, EPOCHS)
 plt.style.use("ggplot")
-plt.figure()
-plt.plot(N, H.history["loss"], label="train_loss")
-plt.plot(N, H.history["val_loss"], label="val_loss")
-plt.plot(N, H.history["acc"], label="train_acc")
-plt.plot(N, H.history["val_acc"], label="val_acc")
-plt.title("Training Loss and Accuracy (Simple NN)")
+_, axs = plt.subplots(2, 1, sharex=True)
+axs[0].plot(N, H.history["mean_squared_error"], label="train_mse")
+axs[0].plot(N, H.history["val_mean_squared_error"], label="val_mse")
+axs[0].set_title("Training MSE")
+axs[0].set_ylabel("MSE")
+axs[0].legend()
+axs[1].plot(N, H.history["mean_absolute_error"], label="train_mae")
+axs[1].plot(N, H.history["val_mean_absolute_error"], label="val_mae")
+axs[1].set_title("Training MAE")
+axs[1].set_ylabel("MAE")
+axs[1].legend()
+plt.tight_layout()
 plt.xlabel("Epoch #")
-plt.ylabel("Loss/Accuracy")
-plt.legend()
 plt.savefig(args["plot"])
 
 # save the model and label binarizer to disk
-print("[INFO] serializing network and label binarizer...")
+print("[INFO] serializing network...")
 model.save(args["model"])
