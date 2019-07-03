@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib
 import argparse
+import joblib
 
 matplotlib.use("Agg")
 
@@ -22,6 +23,7 @@ ap.add_argument(
 ap.add_argument(
     "-p", "--plot", required=True, help="path to output accuracy/loss plot"
 )
+ap.add_argument("-n", "--norm", required=True, help="path to output scaler")
 args = vars(ap.parse_args())
 
 dataframe = pd.read_csv(args["dataset"], delimiter="\t", header=None)
@@ -42,8 +44,14 @@ scaler = preprocessing.MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
+# save scale of x
+joblib.dump(scaler, "{}_x.joblib".format(args["norm"]))
+
 Y_train = scaler.fix_transform(Y_train.reshape(-1, 1))
 Y_test = scaler.transform(Y_test.reshape(-1, 1))
+
+# save scale of y
+joblib.dump(scaler, "{}_y.joblib".format(args["norm"]))
 
 # define the 9-9-6-1 architecture using tf.keras
 model = tf.keras.models.Sequential()
@@ -54,14 +62,14 @@ model.add(tf.keras.layers.Dense(1, activation="linear"))
 
 # initialize our initial learning rate and # of epochs to train for
 # INIT_LR = 0.01
-EPOCHS = 16
+EPOCHS = 30
 
 # compile the model using SGD as our optimizer and categorical
 # cross-entropy loss (you'll want to use binary_crossentropy
 # for 2-class classification)
 print("[INFO] training network...")
 # opt = tf.keras.optimizers.SGD(lr=INIT_LR)
-model.compile(loss="mse", optimizer="sgd", metrics=["mae"])
+model.compile(loss="mse", optimizer="sgd", metrics=["mae", "mse"])
 
 # train the neural network
 H = model.fit(
