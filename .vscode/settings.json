@@ -5,8 +5,8 @@
     "python.linting.enabled": true,
     // "python.analysis.disabled": ["unresolved-import"],
     "python.linting.flake8Args": ["--ignore=E203"],
-    "python.testing.pyTestArgs": ["."],
+    "python.testing.pytestArgs": ["."],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.pyTestEnabled": true
+    "python.testing.pytestEnabled": true
 }
