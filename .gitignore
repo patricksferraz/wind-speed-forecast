@@ -1,8 +1,5 @@
+.vscode
 **.pytest_cache/
 **__pycache__/
-confidential/*
-!confidential/crypt/
-!confidential/*.py
-!confidential/*.encrypt
-**.pem
+confidential/
 .ipynb_checkpoints
